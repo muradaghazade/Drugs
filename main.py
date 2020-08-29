@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float
 import uuid
 
 
-engine = create_engine("postgresql://marmeladze:geometry123@localhost/taskbot_backend", echo=True)
+engine = create_engine("postgresql://aghazadamurad:885522@localhost/drugsdb", echo=True)
 
 Base = declarative_base()
 
