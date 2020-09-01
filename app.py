@@ -27,6 +27,18 @@ class ItemSerializer:
         }
 
 
+class CompanySerializer:
+    def __init__(self, company):
+        self.company = company
+          
+    def to_dict(self):
+        name, country = self.company.name.split(", ")
+        return { 
+            'uuid': self.company.uuid, 
+            'name': name, 
+            'country': country 
+        }
+
 
 
 @app.route('/api/v1/company/<uuid:uuid>/items')
@@ -47,7 +59,22 @@ def items(uuid):
         return jsonify({"error": "error"})
 
 
+@app.route('/api/v1/<uuid:uuid>/companies')
+def companies(uuid):
+    companies = session.query(Company).filter_by(uuid=uuid).all()
 
+    if companies:
+        serialized = [CompanySerializer(company).to_dict() for company in companies]
+        for company in companies:
+            return jsonify({
+                'name': company.name,
+                'uuid': company.uuid,
+                'companies_count': len(companies),
+                'companies': serialized
+            })
+    else:
+        return jsonify({'error':'error'})
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
